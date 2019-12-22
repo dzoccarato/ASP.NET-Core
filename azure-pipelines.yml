@@ -15,7 +15,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-name: $(BuildDefinitionName)_$(SourceBranchName)_$(BuildID)_$(Date:yyyyMMdd)$(Rev:.r)
+name: $(BuildID)_$(Date:yyyyMMdd)$(Rev:.r)
 
 steps:
 - task: PowerShell@2
