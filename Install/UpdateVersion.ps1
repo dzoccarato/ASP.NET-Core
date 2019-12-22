@@ -43,7 +43,7 @@ foreach ($info in $projectInfos) {
   $version = "";  
   # look for version
   foreach($line in Get-Content $info) {
-    if($line -match "(?<=<$FileVersionTag>)(.*)(?=<\/$FileVersionTag>)"){        
+    if($line -match "(?<=<$FileVersionTag>)(.*)(?=<\/$FileVersionTag>)"){
         $version = $matches[1].Split("{.}");
         $_major = [int]$version[0];
         $_minor = [int]$version[1];
