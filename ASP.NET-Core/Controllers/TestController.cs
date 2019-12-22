@@ -7,17 +7,29 @@ using System.Security.Principal;
 
 namespace AspNetCoreJWT.Controllers
 {
+    /// <summary>
+    /// test controller, used to check JWT validity
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TestController : ControllerBase
     {
         private IPrincipal _principal;
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="principal"></param>
         public TestController(IPrincipal principal)
         {
             _principal = principal;
         }
 
+        /// <summary>
+        /// TestToken
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("TestToken")]
         public IActionResult TestToken()
         {

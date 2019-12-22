@@ -6,17 +6,30 @@ namespace AspNetCoreJWT.Controllers
     using AspNetCoreJWT.Dto;
     using AspNetCoreJWT.Services;
 
+    /// <summary>
+    /// login controller
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
     {
         private ILoginService _service;
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="service"></param>
         public LoginController(ILoginService service)
         {
             _service = service;
         }
 
+        /// <summary>
+        /// login: validate user credentials and generate JWT auth token.
+        /// AllowAnonymous
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("Login")]
         public IActionResult Login([FromBody]UserLogin user)

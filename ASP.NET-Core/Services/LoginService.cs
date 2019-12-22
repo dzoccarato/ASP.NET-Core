@@ -10,21 +10,38 @@ namespace AspNetCoreJWT.Services
 {
     using AspNetCoreJWT.Dto;
 
+    /// <summary>
+    /// Implements ILoginService
+    /// </summary>
     public class LoginService: ILoginService
     {
         private IConfiguration _config;
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="config"></param>
         public LoginService(IConfiguration config)
         {
             _config = config;
         }
 
+        /// <summary>
+        /// Mocked autentication service
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public bool Authenticate(UserLogin user)
         {
             return string.Equals(user.UserName, "John Doe", StringComparison.InvariantCultureIgnoreCase)
                     && string.Equals(user.Password, "123", StringComparison.InvariantCultureIgnoreCase);
         }
 
+        /// <summary>
+        /// generate a basic JWT token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public string GenerateJWT(UserLogin user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

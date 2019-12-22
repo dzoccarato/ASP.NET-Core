@@ -7,8 +7,16 @@ using System.Text;
 
 namespace AspNetCoreJWT
 {
+    /// <summary>
+    /// used to add JWT to project
+    /// </summary>
     public static class RegisterJWT
     {
+        /// <summary>
+        /// Configure JWT. use in <seealso cref="Startup.ConfigureServices(IServiceCollection)"/>
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="configuration"></param>
         public static void ConfigureJWT(this IServiceCollection self, IConfiguration configuration)
         {
             System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -29,6 +37,10 @@ namespace AspNetCoreJWT
                 });
         }
 
+        /// <summary>
+        /// Configure JWT. use in <seealso cref="Startup.Configure(IApplicationBuilder, Microsoft.AspNetCore.Hosting.IWebHostEnvironment)"/>
+        /// </summary>
+        /// <param name="self"></param>
         public static void UseJWT(this IApplicationBuilder self)
         {
             self.UseAuthentication();
