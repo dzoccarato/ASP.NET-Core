@@ -12,12 +12,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>.\ASP.NET-Core\bin\Debug\netcoreapp3.1\ASP.NET-Core.xml</DocumentationFile>
+    <DocumentationFile>.\bin\Debug\netcoreapp3.1\ASP.NET-Core.xml</DocumentationFile>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>.\ASP.NET-Core\bin\Debug\netcoreapp3.1\ASP.NET-Core.xml</DocumentationFile>
+    <DocumentationFile>.\bin\Debug\netcoreapp3.1\ASP.NET-Core.xml</DocumentationFile>
     <DefineConstants>TRACE;RELEASE</DefineConstants>
   </PropertyGroup>
 
