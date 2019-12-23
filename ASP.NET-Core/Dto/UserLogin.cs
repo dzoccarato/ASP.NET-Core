@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreJWT.Dto
+﻿namespace ASPNETCore.Dto
 {
     /// <summary>
     /// simple user DTO

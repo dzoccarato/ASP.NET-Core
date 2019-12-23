@@ -6,9 +6,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace AspNetCoreJWT.Services
+namespace ASPNETCore.Services
 {
-    using AspNetCoreJWT.Dto;
+    using ASPNETCore.Dto;
 
     /// <summary>
     /// Implements ILoginService

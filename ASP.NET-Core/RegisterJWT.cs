@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace AspNetCoreJWT
+namespace ASPNETCore
 {
     /// <summary>
     /// used to add JWT to project

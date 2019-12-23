@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AspNetCoreJWT.Controllers
+namespace ASPNETCore.Controllers
 {
-    using AspNetCoreJWT.Dto;
-    using AspNetCoreJWT.Services;
+    using ASPNETCore.Dto;
+    using ASPNETCore.Services;
 
     /// <summary>
     /// login controller

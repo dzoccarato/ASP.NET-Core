@@ -8,9 +8,9 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Security.Principal;
 
-namespace AspNetCoreJWT
+namespace ASPNETCore
 {
-    using AspNetCoreJWT.Services;
+    using ASPNETCore.Services;
 
     /// <summary>
     /// Startup

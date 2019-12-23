@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace AspNetCoreJWT.Controllers
+namespace ASPNETCore.Controllers
 {
     /// <summary>
     /// test controller, used to check JWT validity

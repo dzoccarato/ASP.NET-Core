@@ -1,6 +1,6 @@
-﻿namespace AspNetCoreJWT.Services
+﻿namespace ASPNETCore.Services
 {
-    using AspNetCoreJWT.Dto;
+    using ASPNETCore.Dto;
 
     /// <summary>
     /// Interface used to login to application

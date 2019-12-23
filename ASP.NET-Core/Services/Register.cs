@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AspNetCoreJWT.Services
+namespace ASPNETCore.Services
 {
     /// <summary>
     /// Used to register to startup all services
