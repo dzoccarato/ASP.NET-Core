@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using System;
 using System.Security.Principal;
 
 namespace ASPNETCore
@@ -42,30 +40,9 @@ namespace ASPNETCore
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User);
 
-            // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "AspNetCoreJWT API",
-                    Version = "v1",
-                    Description = "Full documentation to AspNetCoreJWT public API",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Zoccarato Davide",
-                        Email = "davide@davidezoccarato.cloud",
-                        Url = new Uri("https://www.davidezoccarato.cloud/")
-                    },
-                });
-#pragma warning disable CS0618 // Type or member is obsolete
-                c.DescribeAllEnumsAsStrings();
-#pragma warning restore CS0618 // Type or member is obsolete
-                c.IncludeXmlComments(string.Format(@"{0}\ASP.NET-Core.xml", System.AppDomain.CurrentDomain.BaseDirectory));                
-                c.IgnoreObsoleteProperties();
-            });
-
             //
-            services.ConfigureJWT(Configuration);
+            services.ConfigureSwaggerService();
+            services.ConfigureJWTService(Configuration);
             services.ConfigureAppServices(Configuration);
         }
 
@@ -88,25 +65,14 @@ namespace ASPNETCore
 
             app.UseAuthorization();
             
-            app.UseJWT();
+            app.ConfigureJWT();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            #region SWAGGER
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AspNetCoreJWT API V1");
-                c.RoutePrefix = "swagger/ui";
-            });
-            #endregion
+            app.ConfigureSwagger();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace ASPNETCore
         /// </summary>
         /// <param name="self"></param>
         /// <param name="configuration"></param>
-        public static void ConfigureJWT(this IServiceCollection self, IConfiguration configuration)
+        public static void ConfigureJWTService(this IServiceCollection self, IConfiguration configuration)
         {
             System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -41,7 +41,7 @@ namespace ASPNETCore
         /// Configure JWT. use in <seealso cref="Startup.Configure(IApplicationBuilder, Microsoft.AspNetCore.Hosting.IWebHostEnvironment)"/>
         /// </summary>
         /// <param name="self"></param>
-        public static void UseJWT(this IApplicationBuilder self)
+        public static void ConfigureJWT(this IApplicationBuilder self)
         {
             self.UseAuthentication();
         }
