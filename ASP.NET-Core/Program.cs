@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -68,18 +69,24 @@ namespace ASPNETCore
         /// <returns></returns>
         public static IHost BuildHost(string[] args, string contentRoot) =>
             Host.CreateDefaultBuilder(args)
-            .UseContentRoot(contentRoot)
-            .ConfigureLogging((hostContext, loggingBuilder) => loggingBuilder.AddConfiguration(hostContext.Configuration.GetSection("Logging")))
-            .ConfigureAppConfiguration((hostContext, c) =>
-            {
-                c.AddCommandLine(args);
-            })
-            .ConfigureWebHostDefaults(c =>
-            {
-                c.UseStartup<Startup>();
-                c.UseKestrel();
-                c.UseNLog();
-            })
-            .Build();
+                .UseContentRoot(contentRoot)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel();
+                })
+                .ConfigureAppConfiguration((hostContext, c) =>
+                {
+                    c.AddCommandLine(args);
+                })
+                .ConfigureLogging((hostContext, logging) =>
+                {
+                    logging.AddConfiguration(hostContext.Configuration.GetSection("Logging"));
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(LogLevel.Trace);
+                })
+                .UseNLog()  // NLog: Setup NLog for Dependency injection
+                .Build();
+
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace ASPNETCore.Services
 {
@@ -15,15 +16,18 @@ namespace ASPNETCore.Services
     /// </summary>
     public class LoginService: ILoginService
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
+        private readonly ILogger<LoginService> _logger;
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="config"></param>
-        public LoginService(IConfiguration config)
+        /// <param name="logger"></param>
+        public LoginService(IConfiguration config, ILogger<LoginService> logger)
         {
             _config = config;
+            _logger = logger;
         }
 
         /// <summary>
