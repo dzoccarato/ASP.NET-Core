@@ -4,10 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Davide Zoccarato</Authors>
     <RepositoryType>Git</RepositoryType>
-    <PackageProjectUrl></PackageProjectUrl>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
-    <Version>1.0.2.0</Version>
+    <PackageProjectUrl>https://www.davidezoccarato.cloud/category/asp-net-core/</PackageProjectUrl>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
+    <Version>1.0.3.0</Version>
     <RepositoryUrl>https://github.com/dzoccarato/ASP.NET-Core</RepositoryUrl>
   </PropertyGroup>
 
