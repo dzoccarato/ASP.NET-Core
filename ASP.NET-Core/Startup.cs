@@ -54,6 +54,8 @@ namespace ASPNETCore
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
+            ServiceActivator.Configure(app.ApplicationServices);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
