@@ -5,7 +5,8 @@ param (
     [Parameter(Mandatory=$false)][switch]$PATCH,
     [Parameter(Mandatory=$false)][string]$BUILD,
     [Parameter(Mandatory=$false)][switch]$TAG_AND_PUSH,
-    [Parameter(Mandatory=$false)][switch]$SHOW
+    [Parameter(Mandatory=$false)][switch]$SHOW,
+    [Parameter(Mandatory=$false)][string]$PATH
 )
 if($HELP) {            
     echo "# version updater for csproj files";
@@ -16,6 +17,7 @@ if($HELP) {
     echo " -MAJOR (not mandatory) => +1 on major version. reset minor and patch to 0";
     echo " -MINOR (not mandatory) => +1 on minor version. reset patch to 0";
     echo " -PATCH (not mandatory) => +1 on patch version.";
+    echo " -PATH (not mandatory) => specify the path whare look for *.csproj file";
     echo " none of above => +1 on patch version";
     echo " -BUILD (not mandatory) => exact version. If not specified, default is 0";
     echo " -TAG_AND_PUSH (not mandatory) => automatically tag with new version and push the *.csproj to repo";
@@ -27,7 +29,25 @@ if($HELP) {
     echo ".\updateVersion.ps1 -BUILD 1.2.3.4 -TAG_AND_PUSH";
     return;
 }
-$projectInfos = ( Get-ChildItem -Recurse -Filter *.csproj ).FullName
+
+$originalPath = Get-Location;
+
+if ([string]::IsNullOrWhiteSpace($PATH))
+{
+    Write-Host "Path";
+    Write-Host "----";
+    Write-Host $originalPath;
+}
+else
+{
+    Set-Location -Path $PATH
+
+    Write-Host "Path";
+    Write-Host "----";
+    Write-Host $PATH;
+}
+$projectInfos = ( Get-ChildItem -Recurse -Filter *.csproj ).FullName;
+
 # tags
 $VersionPrefixTag = "VersionPrefix";
 $VersionTag = "Version";
@@ -54,7 +74,7 @@ foreach ($info in $projectInfos) {
             $file = Split-Path $info -leaf;
             Write-Host "${file}: " -NoNewline -ForegroundColor DarkGray
             Write-Host "${version}" -ForegroundColor Gray
-            continue;           
+            continue;
         }
         
         if($MAJOR) {
@@ -63,16 +83,22 @@ foreach ($info in $projectInfos) {
             $_patch = 0;
             $_build = 0;
         }
+
         if($MINOR) {
             $_minor = $_minor + 1;
             $_patch = 0;
             $_build = 0;
         }
+
+        if(-not $MAJOR -and -not $MINOR -and -not $PATCH -and [string]::IsNullOrWhiteSpace($BUILD)) {
+            $PATCH = $true;
+        }
         if($PATCH) {
             $_patch = $_patch + 1;
             $_build = 0;
         }
-        if(-not $MAJOR -and -not $MINOR -and -not $PATCH -and -not [string]::IsNullOrWhiteSpace($BUILD)) {            
+
+        if(-not $MAJOR -and -not $MINOR -and -not $PATCH -and -not [string]::IsNullOrWhiteSpace($BUILD)) {
             $_build = $BUILD;
         }
         else {
@@ -100,4 +126,9 @@ if($TAG_AND_PUSH -and -not $SHOW) {
     git pull
     git tag -a "$newVersion" -m "$newVersion"    
     git push origin --tags
+}
+
+# reset original location
+if(-not [string]::IsNullOrWhiteSpace($PATH) -and ([string]::Compare($originalPath, $PATH, $true, [System.Globalization.CultureInfo]::InvariantCulture) -ne 0) ) {
+    Set-Location -Path $originalPath
 }
