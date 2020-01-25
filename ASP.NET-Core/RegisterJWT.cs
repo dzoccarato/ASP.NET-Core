@@ -19,6 +19,7 @@ namespace ASPNETCore
         /// <param name="configuration"></param>
         public static void ConfigureJWTService(this IServiceCollection self, IConfiguration configuration)
         {
+            self.Configure<JwtConfiguration>(configuration.GetSection(ConfigurationKeys.Jwt));
             System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             self.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
