@@ -9,5 +9,10 @@
         /// JWt section key
         /// </summary>
         public static readonly string Jwt = "Jwt";
+
+        /// <summary>
+        /// Service settings
+        /// </summary>
+        public static readonly string ServiceSettings = "ServiceSettings";
     }
 }
