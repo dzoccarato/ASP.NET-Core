@@ -31,17 +31,5 @@ namespace ASPNETCore
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope();
         }
-
-        /// <summary>
-        /// retrive a service of type T from injected services
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="serviceProvider"></param>
-        /// <returns></returns>
-        public static T GetService<T>(IServiceProvider serviceProvider = null)
-        {
-            var provider = serviceProvider ?? _serviceProvider;
-            return provider == null ? default : provider.GetService<T>();
-        }
     }
 }
