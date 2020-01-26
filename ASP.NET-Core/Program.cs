@@ -7,14 +7,22 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace ASPNETCore
 {
+    using ASPNETCore.Configuration;
+    using ASPNETCore.MethodExtensions;
+    using Microsoft.AspNetCore;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Entry point
     /// </summary>
     public class Program
     {
+        private static readonly string _defaultAvailableUrl = $"http://+:5001/";
+
         /// <summary>
         /// entry mehod
         /// </summary>
@@ -26,8 +34,9 @@ namespace ASPNETCore
 
             try
             {
-                var isDebugging = Debugger.IsAttached || args.Contains("--debug");
-                var contentRoot = Directory.GetCurrentDirectory();
+                var currentProcess = Process.GetCurrentProcess();
+                var isDebugging = Debugger.IsAttached || args.Contains("--console");
+                var contentRoot = isDebugging ? Directory.GetCurrentDirectory() : Path.GetDirectoryName(currentProcess.MainModule.FileName);
 
                 var config = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json", optional: false);
@@ -37,15 +46,33 @@ namespace ASPNETCore
                 else
                     config.AddJsonFile("appsettings.production.json", optional: true);
 
-                var host = BuildHost(args, contentRoot);//.Build().Run();
+                var urls = GetAvailableUrls();
+                var host = BuildHost(args.Where(arg => arg != "--console").ToArray(), contentRoot, urls);
 
-                logger.Debug("init main");
-                logger.Debug($"path to appsetting.json file set to: {System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath)}");
+                var log = new StringBuilder()
+                    .AppendLine($"init main / starting app: ")
+                    .AppendLine($"- isDebugging: {isDebugging}")
+                    .AppendLine($"- contentRoot: {contentRoot}")
+                    .AppendLine($"- currentProcess.MainModule.FileName: {currentProcess.MainModule.FileName}")
+                    .AppendLine($"- currentProcess.MainModule.FileVersionInfo: {currentProcess.MainModule.FileVersionInfo.FileVersion}")
+                    .AppendLine($"- path to appsetting.json file set to: {contentRoot}\\appsetting.json")
+                    .AppendLine($"- listen on urls:");
+                foreach (var u in urls)
+                    log.AppendLine($"  - {u}");
+                logger.Debug(log.ToString());
 
-                    Console.Title = "ASPNETCore";
+                Console.Title = $"{currentProcess.MainModule.ModuleName} - v.{currentProcess.MainModule.FileVersionInfo.FileVersion}";
 
-                    logger.Debug("Starting app");
+                if (!isDebugging)
+                {
+                    logger.Debug($"Start as Windows service");
+                    host.RunAsCustomService();
+                }
+                else
+                {
+                    logger.Debug($"Start as Console");
                     host.Run();
+                }
             }
             catch (Exception e)
             {
@@ -60,20 +87,21 @@ namespace ASPNETCore
             }
         }
 
+
+
         /// <summary>
         /// create host CreateHostBuilder
         /// </summary>
         /// <param name="args"></param>
         /// <param name="contentRoot"></param>
+        /// <param name="urls"></param>
         /// <returns></returns>
-        public static IHost BuildHost(string[] args, string contentRoot) =>
-            Host.CreateDefaultBuilder(args)
+        public static IWebHost BuildHost(string[] args, string contentRoot, string[] urls) =>
+            WebHost.CreateDefaultBuilder(args)
                 .UseContentRoot(contentRoot)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseKestrel();
-                })
+                .UseStartup<Startup>()
+                .UseKestrel()
+                .UseUrls(urls)
                 .ConfigureAppConfiguration((hostContext, c) =>
                 {
                     c.AddCommandLine(args);
@@ -86,6 +114,18 @@ namespace ASPNETCore
                 })
                 .UseNLog()  // NLog: Setup NLog for Dependency injection
                 .Build();
+
+        /// <summary>
+        /// read configuration and get availabe urls
+        /// </summary>
+        /// <returns></returns>
+        private static string[] GetAvailableUrls()
+        {
+            IConfigurationRoot configuration = ConfigurationUtils.BuildConfiguration();
+            var serviceSettings = configuration.Get<ServiceSettings>(ConfigurationKeys.ServiceSettings);
+
+            return serviceSettings?.Urls == null || serviceSettings?.Urls.Length > 0 ? serviceSettings.Urls : new List<string> { _defaultAvailableUrl }.ToArray();
+        }
 
     }
 }
