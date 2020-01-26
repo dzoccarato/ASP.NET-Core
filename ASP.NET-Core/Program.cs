@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,8 +15,6 @@ namespace ASPNETCore
 {
     using ASPNETCore.Configuration;
     using ASPNETCore.MethodExtensions;
-    using Microsoft.AspNetCore;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Entry point
